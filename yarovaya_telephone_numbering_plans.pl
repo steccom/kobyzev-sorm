@@ -1,0 +1,33 @@
+#!/usr/bin/perl -w
+
+use strict;
+use lib '..';
+use Data::Validate::IP;
+use bmhead;
+use Text::Iconv;
+use Data::Dumper;
+use BM::DBI;
+use DBHManager qw(get_handle_billing7);
+use dbase qw(insertid);
+use Date::Calc qw( Today_and_Now );
+use Encode;
+
+my $dbh=get_handle_billing7();
+
+my ($y,$m,$d,$h,$mi,$s)= Today_and_Now();
+
+my $fnameutf="telephone_numbering_plans-t_$y$m$d$h$mi$s.csv";
+my $fnamecp="telephone_numbering_plans_$y$m$d$h$mi$s.csv";
+
+open OUT,">$fnameutf";
+
+my $s='"1";"RUS";"499";"3";"10";"11";"РФ";"0";"5198300";"5198499";"200";"Москва";"ООО Спутник Телекоммьюникейшн Энтетеймент Компани";"03.09.2009 00:00:00";"";"";"250";"000";"";""';
+print OUT $s."\r\n";
+close OUT;
+
+#my $cm="iconv -f utf8 -t cp1251 $fnameutf > pd/$fnamecp;rm -f $fnameutf";
+my $cm="iconv -f utf8 -t cp1251 $fnameutf > pay_types/$fnamecp";
+my @res=`$cm`;
+
+exit 0;
+
